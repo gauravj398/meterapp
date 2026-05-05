@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mera Bharat Mahan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'DigitalNumbers-Regular';
+            src: url('./DigitalNumbers-Regular.ttf') format('truetype');
+        }
+
+        :root {
+            --saffron: #FF671F;
+            --white: #FFFFFF;
+            --india-green: #138808;
+            --chakra-blue: #000080;
+            --primary-color: var(--saffron);
+            --secondary-color: #6c757d;
+            --success-color: var(--india-green);
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: var(--chakra-blue);
+            --light-gray: #f8f9fa;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5eb 0%, #e8f5e9 50%, #e8eaf6 100%);
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            user-select: none;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 56px;
+        }
+
+        /* ============ FIXED TOP BAR (logout button iske andar) ============ */
+        .fixed-top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(220,53,69,0.97), rgba(200,35,51,0.97));
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+        .fixed-top-bar .logout-btn {
+            position: static;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            box-shadow: none;
+        }
+        .fixed-top-bar .logout-btn:hover {
+            background: rgba(255,255,255,0.35);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ============ TIMER BAR (neche top bar ke) ============ */
+        .timer-bar-container {
+            position: fixed;
+            top: 48px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(0,0,0,0.03);
+            z-index: 99998;
+            display: none;
+        }
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: rgba(255,255,255,0.5);
+            transition: width 1s linear;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ============ HIDDEN ELEMENTS ============ */
+        .auto-logout-warning { display: none !important; }
+        .current-time-display { display: none !important; }
+
+        /* ============ LOGIN PAGE ============ */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 35px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--saffron), var(--white), var(--india-green));
+        }
+
+        .login-flag-strip {
+            display: flex;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .login-flag-strip div { flex: 1; }
+        .login-flag-strip div:nth-child(1) { background: var(--saffron); }
+        .login-flag-strip div:nth-child(2) { background: var(--white); border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+        .login-flag-strip div:nth-child(3) { background: var(--india-green); }
+
+        .login-title { text-align: center; margin-bottom: 8px; }
+        .login-title h1 {
+            background: linear-gradient(90deg, var(--saffron), var(--india-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+            margin: 0;
+            font-weight: 800;
+        }
+        .login-subtitle { text-align: center; color: var(--secondary-color); font-size: 1em; margin-bottom: 30px; }
+
+        .ashoka-chakra {
+            width: 60px; height: 60px;
+            margin: 0 auto 20px auto;
+            border: 3px solid var(--chakra-blue);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            animation: chakraSpin 20s linear infinite;
+        }
+        .ashoka-chakra::before {
+            content: '☸'; font-size: 36px; color: var(--chakra-blue);
+            animation: chakraSpin 20s linear infinite reverse;
+        }
+        @keyframes chakraSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .login-field { margin-bottom: 18px; }
+        .login-field label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 0.95em; }
+        .login-field .input-wrapper { position: relative; }
+        .login-field .input-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 1em; }
+        .login-field input {
+            width: 100%; padding: 13px 14px 13px 42px;
+            border: 2px solid var(--border-color); border-radius: 12px;
+            font-size: 1em; transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none; background: var(--light-gray);
+        }
+        .login-field input:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255, 103, 31, 0.15); background: #fff; }
+        .login-field input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .save-password-row { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; cursor: pointer; }
+        .save-password-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--saffron); cursor: pointer; }
+        .save-password-row label { font-size: 0.95em; color: #555; cursor: pointer; }
+
+        .login-btn {
+            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, var(--saffron), #e85d10);
+            color: white; font-size: 1.15em; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,103,31,0.35); }
+        .login-btn:active { transform: translateY(0); }
+        .login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+        .login-error {
+            background: #fff0f0; border: 1px solid #f5c6cb; color: var(--danger-color);
+            padding: 12px 14px; border-radius: 10px; font-size: 0.9em;
+            margin-bottom: 16px; display: none; align-items: center; gap: 8px;
+        }
+        .login-error.show { display: flex; }
+
+        .login-time-block {
+            background: #fff3cd; border: 1px solid #ffc107; color: #856404;
+            padding: 14px; border-radius: 10px; font-size: 0.95em;
+            margin-bottom: 16px; display: none; text-align: center;
+            align-items: center; gap: 8px; font-weight: 600;
+        }
+        .login-time-block.show { display: flex; justify-content: center; }
+
+        .login-footer { text-align: center; margin-top: 25px; font-size: 0.85em; color: #999; }
+
+        /* ============ PAGE TITLE ============ */
+        .page-title { text-align: center; margin-bottom: 30px; }
+        .page-title h1 {
+            background: linear-gradient(90deg, var(--saffron), var(--india-green));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 2.2em; margin: 0; font-weight: 800;
+        }
+        .page-title p { color: var(--secondary-color); margin: 5px 0 0 0; font-size: 1.1em; }
+
+        /* ============ METER EDITOR ============ */
+        .default-projects-container { background-color: #ffffff; padding: 20px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; border-top: 5px solid var(--saffron); }
+        .app-container { background-color: #ffffff; padding: 20px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; border-top: 5px solid var(--saffron); margin-top: 20px; }
+        .image-nav-container { display: flex; justify-content: space-between; margin-bottom: 15px; gap: 10px; }
+        .image-nav-btn { flex-grow: 1; background-color: var(--secondary-color); color: white; }
+        .canvas-wrapper { position: relative; margin-bottom: 20px; border: 2px dashed var(--border-color); border-radius: 12px; background-color: var(--light-gray); display: flex; justify-content: center; align-items: center; min-height: 250px; overflow: hidden; flex-direction: column; touch-action: none; }
+        #imageCanvas { max-width: 100%; height: auto; border-radius: 10px; display: block; }
+        #canvas-placeholder { position: absolute; color: #888; text-align: center; padding: 10px; font-size: 1.1em; }
+
+        .controls-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .controls-grid { grid-template-columns: 1fr 1fr 1fr; } }
+        @media (min-width: 600px) and (max-width: 767px) { .controls-grid { grid-template-columns: 1fr 1fr; } }
+
+        .control-group { background: var(--light-gray); padding: 15px; border-radius: 12px; border: 1px solid #e9ecef; display: flex; flex-direction: column; gap: 15px; border-top: 3px solid var(--info-color); }
+        .control-group h3 { margin: 0 0 10px 0; font-size: 1.1em; color: var(--chakra-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .form-field { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .form-field label { font-weight: 500; font-size: 0.9em; color: #555; flex-shrink: 0; min-width: 80px; }
+        #meterReading, #projectNameInput { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; }
+        #textColorPicker { height: 40px; border: 1px solid var(--border-color); border-radius: 8px; padding: 0; background: none; width: 50px; cursor: pointer; }
+
+        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; font-size: 1em; }
+        .btn:disabled { background-color: #ccc !important; cursor: not-allowed; opacity: 0.7; transform: none !important; box-shadow: none !important; }
+        .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        input[type="file"] { display: none; }
+
+        /* ============ PROJECT CARDS ============ */
+        .default-projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 25px; margin-top: 20px; }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+
+        .project-card-btn {
+            padding: 4px; border-radius: 16px;
+            background: conic-gradient(from 0deg, #FF671F, #ffffff, #138808, #000080, #FF671F);
+            position: relative; z-index: 1; border: none; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(50px);
+            animation: slideInUp 0.6s ease-out forwards, rotateBorder 4s linear infinite;
+        }
+        .project-card-btn:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); }
+
+        .card-content-wrapper {
+            background-color: #ffffff; color: var(--chakra-blue); font-size: 1.2em; font-weight: bold;
+            text-align: center; min-height: 100px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%; position: relative; overflow: hidden; box-sizing: border-box; padding: 10px;
+        }
+        .card-content-wrapper::after { content: ''; position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255, 103, 31, 0.15) 10%, transparent 70%); animation: moveGlow 6s infinite alternate ease-in-out; }
+        @keyframes moveGlow { 0% { transform: translate(-50%, -50%); } 100% { transform: translate(50%, 50%); } }
+        @keyframes rotateBorder { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        /* ============ SLIDERS ============ */
+        .slider-wrapper { display: flex; align-items: center; gap: 10px; flex-grow: 1; width: 100%; }
+        .slider-wrapper input[type="range"] { width: 100%; accent-color: var(--saffron); }
+        .btn-adjust { font-family: monospace; font-weight: bold; font-size: 1.4em; padding: 0; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; border: 1px solid var(--border-color); background-color: white; color: var(--chakra-blue); cursor: pointer; flex-shrink: 0; }
+        .btn-adjust:hover { background-color: var(--light-gray); color: var(--saffron); border-color: var(--saffron); }
+        .slider-value { min-width: 35px; text-align: right; font-weight: 500; font-size: 1em; color: var(--chakra-blue); }
+
+        /* ============ MODALS ============ */
+        .modal { display: none; position: fixed; z-index: 100000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow); border-top: 5px solid var(--chakra-blue); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; color: var(--primary-color); }
+        .close-btn { font-size: 2em; cursor: pointer; border: none; background: none; line-height: 1; color: #666; padding: 0 5px; }
+        .close-btn:hover { color: #333; }
+
+        #projectList { list-style: none; padding: 0; margin: 0; }
+        #projectList li { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 10px; background-color: var(--light-gray); flex-wrap: wrap; gap: 10px; border-left: 4px solid var(--saffron); }
+        #projectList li span { font-weight: 500; color: #333; flex-grow: 1; word-break: break-all; }
+        .project-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .project-actions .btn { padding: 8px 12px; font-size: 0.9em; }
+
+        /* ============ LOGOUT CONFIRM MODAL ============ */
+        .logout-modal { display: none; position: fixed; z-index: 100001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        .logout-modal-box { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25); border-top: 5px solid var(--danger-color); }
+        .logout-modal-box i { font-size: 3em; color: var(--danger-color); margin-bottom: 15px; }
+        .logout-modal-box h3 { margin: 0 0 10px 0; color: #333; }
+        .logout-modal-box p { color: #666; font-size: 0.95em; margin-bottom: 25px; }
+        .logout-modal-btns { display: flex; gap: 12px; }
+        .logout-modal-btns .btn { flex: 1; }
+
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-10px)} 80%{transform:translateX(10px)} }
+    </style>
+</head>
+<body>
+
+<!-- ============ FIXED TOP BAR (logout button yahan hai, kabhi image par nahi aayega) ============ -->
+<div class="fixed-top-bar" id="fixedTopBar">
+    <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> लॉगआउट
+    </button>
+</div>
+
+<!-- ============ TIMER BAR ============ -->
+<div class="timer-bar-container" id="timerBarContainer">
+    <div class="timer-bar" id="timerBar"></div>
+</div>
+
+<!-- ============ HIDDEN: Auto logout warning ============ -->
+<div class="auto-logout-warning" id="autoLogoutWarning">
+    <i class="fas fa-exclamation-triangle"></i>
+    कोई गतिविधि नहीं! ऑटो लॉगआउट: <span class="countdown" id="autoLogoutCountdown">60</span>s
+</div>
+
+<!-- ============ LOGIN PAGE ============ -->
+<div class="login-page" id="loginPage">
+    <div class="login-box">
+        <div class="login-flag-strip">
+            <div></div><div></div><div></div>
+        </div>
+        <div class="ashoka-chakra"></div>
+        <div class="login-title">
+            <h1>Mera Bharat Mahan</h1>
+        </div>
+        <p class="login-subtitle">सबका साथ सबका विकास</p>
+
+        <div class="current-time-display" id="currentTimeDisplay">
+            अभी का समय: <span id="liveClock">--:--:--</span>
+        </div>
+
+        <div class="login-time-block" id="loginTimeBlock">
+            <i class="fas fa-clock"></i>
+            Pls Login 06:00 AM TO 08:00 PM
+        </div>
+
+        <div class="login-error" id="loginError">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="loginErrorText">ईमेल या पासवर्ड गलत है!</span>
+        </div>
+
+        <div class="login-field">
+            <label for="loginEmail">ईमेल</label>
+            <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="loginEmail" placeholder="अपना ईमेल दर्ज करें" autocomplete="email">
+            </div>
+        </div>
+
+        <div class="login-field">
+            <label for="loginPassword">पासवर्ड</label>
+            <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="loginPassword" placeholder="अपना पासवर्ड दर्ज करें" autocomplete="current-password">
+            </div>
+        </div>
+
+        <div class="save-password-row" id="savePasswordRow">
+            <input type="checkbox" id="savePasswordCheck">
+            <label for="savePasswordCheck">पासवर्ड याद रखें</label>
+        </div>
+
+        <button class="login-btn" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            लॉगिन करें
+        </button>
+
+        <div class="login-footer">
+            <p>🇮🇳 जय हिंद</p>
+        </div>
+    </div>
+</div>
+
+<!-- ============ LOGOUT CONFIRM MODAL ============ -->
+<div class="logout-modal" id="logoutModal">
+    <div class="logout-modal-box">
+        <i class="fas fa-sign-out-alt"></i>
+        <h3>लॉगआउट करें?</h3>
+        <p>क्या आप वाकई लॉगआउट करना चाहते हैं? सेव पासवर्ड हटा दिया जाएगा।</p>
+        <div class="logout-modal-btns">
+            <button class="btn" id="cancelLogoutBtn" style="background-color: var(--secondary-color); color: white;">
+                <i class="fas fa-times"></i> नहीं
+            </button>
+            <button class="btn" id="confirmLogoutBtn" style="background-color: var(--danger-color); color: white;">
+                <i class="fas fa-sign-out-alt"></i> हाँ, लॉगआउट
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div class="main-wrapper" id="mainApp" style="display:none;">
+    <div class="page-title">
+        <h1>Mera Bharat Mahan</h1>
+        <p>सबका साथ सबका विकास</p>
+    </div>
+
+    <div id="meter-editor-page">
+        <div class="default-projects-container" id="projects-view">
+            <header><h2 style="color: var(--primary-color); margin-top:0;">मीटर टेम्पलेट चुनें</h2></header>
+            <div id="default-projects-grid" class="default-projects-grid"></div>
+            <button id="manageSavedProjectsBtn" class="btn" style="background-color: var(--info-color); color: white; width:100%; margin-top:20px;"><i class="fas fa-list-alt"></i> मेरे सेव प्रोजेक्ट्स</button>
+        </div>
+
+        <div class="app-container" id="editor-view" style="display:none;">
+            <main>
+                <button id="backToProjectsBtn" class="btn" style="width: 100%; margin-bottom: 20px; background-color: var(--secondary-color); color:white;"><i class="fas fa-arrow-left"></i> वापस टेम्पलेट्स पर</button>
+
+                <div id="image-nav-container" class="image-nav-container" style="display: none;">
+                    <button id="prev-meter-btn" class="btn image-nav-btn"><i class="fas fa-arrow-left"></i> पीछे</button>
+                    <button id="next-meter-btn" class="btn image-nav-btn">आगे <i class="fas fa-arrow-right"></i></button>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="imageCanvas"></canvas>
+                    <div id="canvas-placeholder">मीटर टेम्पलेट चुनें या इमेज अपलोड करें</div>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3><i class="fas fa-pencil-alt"></i> टेक्स्ट और कलर</h3>
+                        <div class="form-field-group">
+                            <p style="font-size: 0.9em; color: #666; margin:0;">उंगली से टेक्स्ट खींचें। नीचे एडिट करें।</p>
+                        </div>
+                        <input type="text" id="meterReading" placeholder="टेक्स्ट रीडिंग" disabled>
+                        <div class="form-field">
+                            <label for="sizeSlider">साइज़</label>
+                            <input type="range" id="sizeSlider" min="10" max="250" value="70" disabled>
+                        </div>
+                        <div class="form-field">
+                            <label for="opacitySlider">अपारिटी</label>
+                            <div class="slider-wrapper">
+                                <button class="btn-adjust" data-target="opacitySlider" data-amount="-5">-</button>
+                                <input type="range" id="opacitySlider" min="0" max="100" value="70" disabled>
+                                <button class="btn-adjust" data-target="opacitySlider" data-amount="5">+</button>
+                            </div>
+                            <span id="opacityValue" class="slider-value">70%</span>
+                        </div>
+                        <div class="form-field">
+                            <label for="textColorPicker">कलर</label>
+                            <input type="color" id="textColorPicker" value="#000000" disabled>
+                        </div>
+                        <button id="deleteTextBtn" class="btn" style="background-color:var(--danger-color); color:white;" disabled><i class="fas fa-trash-alt"></i> टेक्स्ट हटाएं</button>
+                    </div>
+
+                    <div class="control-group">
+                        <h3><i class="fas fa-magic"></i> इमेज एडजस्टमेंट</h3>
+                        <div class="form-field">
+                            <label>रोशनी</label>
+                            <div class="slider-wrapper">
+                                <button class="btn-adjust" data-target="brightnessSlider" data-amount="-1">-</button>
+                                <input type="range" id="brightnessSlider" min="-100" max="100" value="0">
+                                <button class="btn-adjust" data-target="brightnessSlider" data-amount="1">+</button>
+                            </div>
+                            <span id="brightnessValue" class="slider-value">0</span>
+                        </div>
+                        <div class="form-field">
+                            <label>कंट्रास्ट</label>
+                            <div class="slider-wrapper">
+                                <button class="btn-adjust" data-target="contrastSlider" data-amount="-1">-</button>
+                                <input type="range" id="contrastSlider" min="-100" max="100" value="0">
+                                <button class="btn-adjust" data-target="contrastSlider" data-amount="1">+</button>
+                            </div>
+                            <span id="contrastValue" class="slider-value">0</span>
+                        </div>
+                        <div class="form-field">
+                            <label>सैचुरेशन</label>
+                            <div class="slider-wrapper">
+                                <button class="btn-adjust" data-target="saturationSlider" data-amount="-1">-</button>
+                                <input type="range" id="saturationSlider" min="-100" max="100" value="0">
+                                <button class="btn-adjust" data-target="saturationSlider" data-amount="1">+</button>
+                            </div>
+                            <span id="saturationValue" class="slider-value">0</span>
+                        </div>
+                        <div class="form-field">
+                            <label>ह्यू</label>
+                            <div class="slider-wrapper">
+                                <button class="btn-adjust" data-target="hueSlider" data-amount="-1">-</button>
+                                <input type="range" id="hueSlider" min="-180" max="180" value="0">
+                                <button class="btn-adjust" data-target="hueSlider" data-amount="1">+</button>
+                            </div>
+                            <span id="hueValue" class="slider-value">0</span>
+                        </div>
+                        <div class="form-field">
+                            <label>ग्लो</label>
+                            <div class="slider-wrapper">
+                                <button class="btn-adjust" data-target="glowSlider" data-amount="-1">-</button>
+                                <input type="range" id="glowSlider" min="0" max="50" value="0">
+                                <button class="btn-adjust" data-target="glowSlider" data-amount="1">+</button>
+                            </div>
+                            <span id="glowValue" class="slider-value">0</span>
+                        </div>
+                        <button id="resetFiltersBtn" class="btn" style="background-color:var(--secondary-color); color:white;"><i class="fas fa-sync-alt"></i> रीसेट करें</button>
+                    </div>
+
+                    <div class="control-group">
+                        <h3><i class="fas fa-cog"></i> प्रोजेक्ट और इमेज</h3>
+                        <label id="customImageLabel" for="imageLoader" class="btn" style="background-color: var(--info-color); color: white; cursor:pointer;"><i class="fas fa-upload"></i> कस्टम इमेज अपलोड</label>
+                        <input type="file" id="imageLoader" accept="image/*"/>
+                        <input type="text" id="projectNameInput" placeholder="प्रोजेक्ट का नाम (सेव करने के लिए)">
+                        <button id="saveProjectBtn" class="btn" style="background-color: var(--info-color); color: white;" disabled><i class="fas fa-save"></i> ब्राउज़र में सेव करें</button>
+                        <button id="downloadBtn" class="btn" style="background-color: var(--success-color); color: white;" disabled><i class="fas fa-download"></i> डाउनलोड करें</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<!-- Saved Projects Modal -->
+<div id="projectsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>मेरे सेव किए प्रोजेक्ट्स</h2>
+            <button id="closeModalBtn" class="close-btn">&times;</button>
+        </div>
+        <ul id="projectList"></ul>
+        <p id="no-projects-message" style="text-align: center; color: #666; margin-top: 20px; display: none;">कोई प्रोजेक्ट सेव नहीं है।</p>
+    </div>
+</div>
+
+<script>
+    // ============ DOM ELEMENTS ============
+    const loginPage = document.getElementById('loginPage');
+    const mainApp = document.getElementById('mainApp');
+    const fixedTopBar = document.getElementById('fixedTopBar');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
+    const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const savePasswordCheck = document.getElementById('savePasswordCheck');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const loginErrorText = document.getElementById('loginErrorText');
+    const loginTimeBlock = document.getElementById('loginTimeBlock');
+    const liveClock = document.getElementById('liveClock');
+    const timerBarContainer = document.getElementById('timerBarContainer');
+    const timerBar = document.getElementById('timerBar');
+    const autoLogoutWarning = document.getElementById('autoLogoutWarning');
+    const autoLogoutCountdown = document.getElementById('autoLogoutCountdown');
+
+    const projectsView = document.getElementById('projects-view');
+    const editorView = document.getElementById('editor-view');
+    const defaultProjectsGrid = document.getElementById('default-projects-grid');
+    const backToProjectsBtn = document.getElementById('backToProjectsBtn');
+    const manageSavedProjectsBtn = document.getElementById('manageSavedProjectsBtn');
+    const canvas = document.getElementById('imageCanvas');
+    const ctx = canvas.getContext('2d');
+    const imageLoader = document.getElementById('imageLoader');
+    const meterReadingInput = document.getElementById('meterReading');
+    const sizeSlider = document.getElementById('sizeSlider');
+    const textColorPicker = document.getElementById('textColorPicker');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const placeholder = document.getElementById('canvas-placeholder');
+    const saveProjectBtn = document.getElementById('saveProjectBtn');
+    const projectsModal = document.getElementById('projectsModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const projectList = document.getElementById('projectList');
+    const deleteTextBtn = document.getElementById('deleteTextBtn');
+    const projectNameInput = document.getElementById('projectNameInput');
+    const noProjectsMessage = document.getElementById('no-projects-message');
+    const imageNavContainer = document.getElementById('image-nav-container');
+    const prevMeterBtn = document.getElementById('prev-meter-btn');
+    const nextMeterBtn = document.getElementById('next-meter-btn');
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    const opacitySlider = document.getElementById('opacitySlider');
+    const opacityValue = document.getElementById('opacityValue');
+    const brightnessSlider = document.getElementById('brightnessSlider');
+    const contrastSlider = document.getElementById('contrastSlider');
+    const saturationSlider = document.getElementById('saturationSlider');
+    const hueSlider = document.getElementById('hueSlider');
+    const glowSlider = document.getElementById('glowSlider');
+
+    // ============ LOGIN CREDENTIALS ============
+    const VALID_EMAIL = '12345@gmail.com';
+    const VALID_PASSWORD = '12345';
+    const LOGIN_STORAGE_KEY = 'mbm_login_saved';
+
+    // ============ INACTIVITY TIMER (Date.now() based — minimize par bhi kaam karega) ============
+    const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 minutes
+    let lastActivityTime = Date.now();
+    let inactivityCheckTimer = null;
+    let isLoggedIn = false;
+
+    // ============ LIVE CLOCK (hidden, background me chalta hai) ============
+    function updateLiveClock() {
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        let s = now.getSeconds();
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        liveClock.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
+    }
+    setInterval(updateLiveClock, 1000);
+    updateLiveClock();
+
+    // ============ TIME CHECK (06:00 AM to 08:00 PM) ============
+    function isWithinAllowedTime() {
+        const hours = new Date().getHours();
+        return hours >= 6 && hours < 20;
+    }
+
+    function updateLoginTimeState() {
+        if (!isWithinAllowedTime()) {
+            loginTimeBlock.classList.add('show');
+            loginBtn.disabled = true;
+            loginEmail.disabled = true;
+            loginPassword.disabled = true;
+            savePasswordCheck.disabled = true;
+        } else {
+            loginTimeBlock.classList.remove('show');
+            loginBtn.disabled = false;
+            loginEmail.disabled = false;
+            loginPassword.disabled = false;
+            savePasswordCheck.disabled = false;
+        }
+    }
+    setInterval(updateLoginTimeState, 10000);
+
+    // ============ INACTIVITY TIMER — Date.now() approach ============
+    // Ye approach minimize/tab switch par bhi kaam karta hai kyunki
+    // Date.now() hamesha real time deta hai, setInterval pe depend nahi karta.
+    function startInactivityTimer() {
+        stopInactivityTimer();
+        lastActivityTime = Date.now();
+        timerBarContainer.style.display = 'block';
+        timerBar.style.width = '100%';
+
+        // Har 1 second me check karo — kitna time bacha hai
+        inactivityCheckTimer = setInterval(() => {
+            const now = Date.now();
+            const elapsed = now - lastActivityTime;
+            const remaining = Math.max(0, INACTIVITY_LIMIT - elapsed);
+            const percent = (remaining / INACTIVITY_LIMIT) * 100;
+            timerBar.style.width = percent + '%';
+
+            // 30 minute poore ho gaye — silent logout
+            if (remaining <= 0) {
+                performAutoLogout();
+            }
+        }, 1000);
+    }
+
+    function recordActivity() {
+        if (!isLoggedIn) return;
+        lastActivityTime = Date.now();
+    }
+
+    function stopInactivityTimer() {
+        if (inactivityCheckTimer) { clearInterval(inactivityCheckTimer); inactivityCheckTimer = null; }
+        timerBarContainer.style.display = 'none';
+    }
+
+    function performAutoLogout() {
+        // Complete silent logout — no alert, no warning
+        stopInactivityTimer();
+        forceLogout(false);
+    }
+
+    // Track ALL user activity — mouse, keyboard, touch, scroll, visibility change
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'touchstart', 'touchmove', 'scroll', 'click'];
+    activityEvents.forEach(event => {
+        document.addEventListener(event, recordActivity, { passive: true });
+    });
+
+    // Jab tab minimize ho ya switch ho — bhi time track karo
+    // visibilitychange tab par bhi fire hota hai jab user dusri tab pe jaye
+    document.addEventListener('visibilitychange', () => {
+        if (!isLoggedIn) return;
+        // Jab user wapas aaye to check karo ki 30 min se zyada to nahi hue
+        if (document.visibilityState === 'visible') {
+            const elapsed = Date.now() - lastActivityTime;
+            if (elapsed >= INACTIVITY_LIMIT) {
+                performAutoLogout();
+            }
+        }
+    });
+
+    // Page unload/blur bhi track karo (tab switch, minimize)
+    window.addEventListener('blur', () => {
+        if (isLoggedIn) recordActivity();
+    });
+
+    // ============ LOGIN/LOGOUT FUNCTIONS ============
+    function checkSavedLogin() {
+        const saved = localStorage.getItem(LOGIN_STORAGE_KEY);
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                if (data.email === VALID_EMAIL && data.password === VALID_PASSWORD) return data;
+            } catch(e) {}
+        }
+        return null;
+    }
+
+    function doLogin() {
+        loginPage.style.display = 'none';
+        mainApp.style.display = 'block';
+        fixedTopBar.style.display = 'flex';
+        isLoggedIn = true;
+        startInactivityTimer();
+    }
+
+    function forceLogout(clearPassword = true) {
+        stopInactivityTimer();
+        if (clearPassword) localStorage.removeItem(LOGIN_STORAGE_KEY);
+        loginEmail.value = '';
+        loginPassword.value = '';
+        savePasswordCheck.checked = false;
+        loginError.classList.remove('show');
+        mainApp.style.display = 'none';
+        fixedTopBar.style.display = 'none';
+        logoutModal.style.display = 'none';
+        loginPage.style.display = 'flex';
+        isLoggedIn = false;
+        resetEditorState();
+        redrawCanvas();
+        showView('projects');
+        updateLoginTimeState();
+    }
+
+    // ============ AUTO-LOGIN ON LOAD ============
+    window.addEventListener('DOMContentLoaded', () => {
+        updateLoginTimeState();
+        populateDefaultMeters();
+
+        const saved = checkSavedLogin();
+        if (saved && isWithinAllowedTime()) {
+            loginEmail.value = saved.email;
+            loginPassword.value = saved.password;
+            savePasswordCheck.checked = true;
+            doLogin();
+        } else if (saved && !isWithinAllowedTime()) {
+            loginEmail.value = saved.email;
+            loginPassword.value = saved.password;
+            savePasswordCheck.checked = true;
+            updateLoginTimeState();
+        }
+    });
+
+    // ============ LOGIN BUTTON ============
+    loginBtn.addEventListener('click', () => {
+        if (!isWithinAllowedTime()) {
+            loginTimeBlock.classList.add('show');
+            return;
+        }
+
+        const email = loginEmail.value.trim();
+        const password = loginPassword.value.trim();
+
+        if (!email || !password) {
+            loginErrorText.textContent = 'कृपया ईमेल और पासवर्ड दोनों दर्ज करें!';
+            loginError.classList.add('show');
+            loginTimeBlock.classList.remove('show');
+            return;
+        }
+
+        if (email !== VALID_EMAIL || password !== VALID_PASSWORD) {
+            loginErrorText.textContent = 'ईमेल या पासवर्ड गलत है! सही डिटेल्स डालें।';
+            loginError.classList.add('show');
+            loginTimeBlock.classList.remove('show');
+            const box = document.querySelector('.login-box');
+            box.style.animation = 'none';
+            box.offsetHeight;
+            box.style.animation = 'shake 0.5s ease';
+            return;
+        }
+
+        loginError.classList.remove('show');
+        loginTimeBlock.classList.remove('show');
+
+        if (savePasswordCheck.checked) {
+            localStorage.setItem(LOGIN_STORAGE_KEY, JSON.stringify({ email, password }));
+        } else {
+            localStorage.removeItem(LOGIN_STORAGE_KEY);
+        }
+
+        doLogin();
+    });
+
+    loginPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginBtn.click(); });
+    loginEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginPassword.focus(); });
+
+    // ============ LOGOUT BUTTONS ============
+    logoutBtn.addEventListener('click', () => { logoutModal.style.display = 'flex'; });
+    cancelLogoutBtn.addEventListener('click', () => { logoutModal.style.display = 'none'; });
+    confirmLogoutBtn.addEventListener('click', () => { forceLogout(true); });
+    logoutModal.addEventListener('click', (e) => { if (e.target === logoutModal) logoutModal.style.display = 'none'; });
+
+    // ============ EDITOR STATE ============
+    let originalImage = null;
+    let textObjects = [];
+    let isDragging = false;
+    let dragStartX, dragStartY;
+    let currentMeterIndex = -1;
+    let isCustomImage = false;
+    let isPinching = false;
+    let initialPinchDistance = 0;
+    let initialTextSize = 0;
+
+    const defaultMeters = [
+        { name: 'New Meter KWH', imageUrl: './new meter.jpeg' },
+        { name: 'HPL 2 KWH', imageUrl: './hplkwh2.jpeg' },
+        { name: 'HPL 2 MD', imageUrl: './hplmd2.jpeg' },
+        { name: 'Capital KWH', imageUrl: './meter2.jpg' },
+        { name: 'BENTEC KWH', imageUrl: './meter3.jpg.jpg' },
+        { name: 'BENTEC MD', imageUrl: './meter4.jpg' },
+        { name: 'Genus MD', imageUrl: './meter7.png' },
+        { name: 'Genus KWH', imageUrl: './meter8.png' },
+        { name: 'MTI MD', imageUrl: './meter13.jpg' },
+        { name: 'MTI KWH', imageUrl: './meter12.jpg' },
+        { name: 'Secure KWH', imageUrl: './meter14.jpg' },
+        { name: 'Secure MD', imageUrl: './meter15.jpg' },
+        { name: 'HPL Meter', imageUrl: './HPL.JPG.png' },
+        { name: 'MT KWH MD', imageUrl: './MT.jpeg' },
+    ];
+
+    // ============ UI FUNCTIONS ============
+    function showView(view) {
+        if (view === 'editor') {
+            editorView.style.display = 'block';
+            projectsView.style.display = 'none';
+        } else {
+            editorView.style.display = 'none';
+            projectsView.style.display = 'block';
+        }
+    }
+
+    function populateDefaultMeters() {
+        defaultProjectsGrid.innerHTML = '';
+        defaultMeters.forEach((meter, index) => {
+            const button = document.createElement('button');
+            button.className = 'project-card-btn';
+            button.innerHTML = `<span class="card-content-wrapper">${meter.name}</span>`;
+            button.style.animationDelay = `${index * 0.08}s`;
+            button.addEventListener('click', () => {
+                currentMeterIndex = index;
+                isCustomImage = false;
+                projectNameInput.value = meter.name;
+                loadAndDisplayImage(meter.imageUrl);
+            });
+            defaultProjectsGrid.appendChild(button);
+        });
+    }
+
+    // ============ CANVAS & EDITOR ============
+    function loadAndDisplayImage(imageSrc) {
+        if(resetFiltersBtn) resetFiltersBtn.click();
+        originalImage = new Image();
+        originalImage.onload = () => {
+            showView('editor');
+            resetEditorState(true);
+            const aspectRatio = originalImage.width / originalImage.height;
+            const maxWidth = document.querySelector('.canvas-wrapper').clientWidth;
+            canvas.width = Math.min(originalImage.width, maxWidth);
+            canvas.height = canvas.width / aspectRatio;
+            const defaultText = { text: "100", x: canvas.width / 2 - 30, y: canvas.height / 2 - 30, size: 60, color: '#000000', opacity: 0.70 };
+            textObjects.push(defaultText);
+            redrawCanvas();
+            updateControls();
+            [downloadBtn, saveProjectBtn].forEach(btn => btn.disabled = false);
+            imageNavContainer.style.display = !isCustomImage ? 'flex' : 'none';
+        };
+        originalImage.onerror = () => alert(`इमेज लोड नहीं हो सकी: ${imageSrc}`);
+        originalImage.src = imageSrc;
+    }
+
+    function resetEditorState(keepImage = false) {
+        if (!keepImage) originalImage = null;
+        textObjects = [];
+        updateControls();
+        placeholder.style.display = 'block';
+    }
+
+    function redrawCanvas() {
+        const brightness = 100 + parseInt(brightnessSlider.value);
+        const contrast = 100 + parseInt(contrastSlider.value);
+        const saturate = 100 + parseInt(saturationSlider.value);
+        const hue = parseInt(hueSlider.value);
+        const glow = parseInt(glowSlider.value);
+        const filterString = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturate}%) hue-rotate(${hue}deg) drop-shadow(0 0 ${glow}px rgba(255, 255, 150, 0.7))`;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (originalImage) {
+            ctx.filter = filterString;
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+            ctx.filter = 'none';
+            placeholder.style.display = 'none';
+        } else {
+            placeholder.style.display = 'block';
+            return;
+        }
+        textObjects.forEach((textObj) => {
+            ctx.globalAlpha = textObj.opacity !== undefined ? textObj.opacity : 1.0;
+            ctx.font = `${textObj.size}px 'DigitalNumbers-Regular'`;
+            ctx.fillStyle = textObj.color;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(textObj.text, textObj.x, textObj.y);
+        });
+        ctx.globalAlpha = 1.0;
+    }
+
+    function updateControls() {
+        const textExists = textObjects.length > 0;
+        [meterReadingInput, sizeSlider, opacitySlider, textColorPicker, deleteTextBtn].forEach(el => el.disabled = !textExists);
+        if (textExists) {
+            const t = textObjects[0];
+            meterReadingInput.value = t.text;
+            sizeSlider.value = t.size;
+            const opVal = (t.opacity !== undefined ? t.opacity : 1.0) * 100;
+            opacitySlider.value = opVal;
+            opacityValue.textContent = Math.round(opVal) + '%';
+            textColorPicker.value = t.color;
+        } else {
+            meterReadingInput.value = '';
+            sizeSlider.value = 70;
+            opacitySlider.value = 70;
+            opacityValue.textContent = '70%';
+            textColorPicker.value = '#000000';
+        }
+    }
+
+    // ============ TOUCH & MOUSE ============
+    function getCanvasCoordinates(e) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches ? e.touches[0] : e;
+        return { x: (touch.clientX - rect.left) * (canvas.width / rect.width), y: (touch.clientY - rect.top) * (canvas.height / rect.height) };
+    }
+    function isTouchingText(pos, textObj) {
+        ctx.font = `${textObj.size}px 'DigitalNumbers-Regular'`;
+        const metrics = ctx.measureText(textObj.text);
+        return (pos.x >= textObj.x && pos.x <= textObj.x + metrics.width && pos.y >= textObj.y && pos.y <= textObj.y + parseInt(textObj.size, 10));
+    }
+    function handleStart(e) {
+        e.preventDefault();
+        const touches = e.touches;
+        if (touches && touches.length === 2) {
+            isPinching = true; isDragging = false;
+            initialPinchDistance = Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+            if (textObjects.length > 0) initialTextSize = textObjects[0].size;
+        } else {
+            const pos = getCanvasCoordinates(e);
+            if (textObjects.length > 0 && isTouchingText(pos, textObjects[0])) {
+                isDragging = true;
+                dragStartX = pos.x - textObjects[0].x;
+                dragStartY = pos.y - textObjects[0].y;
+            }
+        }
+        redrawCanvas();
+    }
+    function handleMove(e) {
+        e.preventDefault();
+        const touches = e.touches;
+        if (isPinching && touches && touches.length === 2 && textObjects.length > 0) {
+            const currentPinchDistance = Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+            let newSize = Math.round(initialTextSize * (currentPinchDistance / initialPinchDistance));
+            newSize = Math.max(10, Math.min(newSize, 250));
+            textObjects[0].size = newSize;
+            sizeSlider.value = newSize;
+            redrawCanvas();
+        } else if (isDragging && textObjects.length > 0) {
+            const pos = getCanvasCoordinates(e);
+            textObjects[0].x = pos.x - dragStartX;
+            textObjects[0].y = pos.y - dragStartY;
+            redrawCanvas();
+        }
+    }
+    function handleEnd() { isDragging = false; isPinching = false; redrawCanvas(); }
+
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    canvas.addEventListener('touchstart', handleStart, { passive: false });
+    canvas.addEventListener('touchmove', handleMove, { passive: false });
+    canvas.addEventListener('touchend', handleEnd);
+
+    // ============ CONTROLS ============
+    meterReadingInput.addEventListener('input', (e) => { if (textObjects.length > 0) { textObjects[0].text = e.target.value; redrawCanvas(); } });
+    sizeSlider.addEventListener('input', (e) => { if (textObjects.length > 0) { textObjects[0].size = parseInt(e.target.value, 10); redrawCanvas(); } });
+    opacitySlider.addEventListener('input', (e) => { if (textObjects.length > 0) { textObjects[0].opacity = parseInt(e.target.value, 10) / 100; opacityValue.textContent = e.target.value + '%'; redrawCanvas(); } });
+    textColorPicker.addEventListener('input', (e) => { if (textObjects.length > 0) { textObjects[0].color = e.target.value; redrawCanvas(); } });
+    deleteTextBtn.addEventListener('click', () => { if (textObjects.length > 0) { textObjects.splice(0, 1); updateControls(); redrawCanvas(); } });
+
+    imageLoader.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            isCustomImage = true; currentMeterIndex = -1;
+            projectNameInput.value = file.name.replace(/\.[^/.]+$/, '');
+            const reader = new FileReader();
+            reader.onload = (event) => loadAndDisplayImage(event.target.result);
+            reader.readAsDataURL(file);
+        }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+        redrawCanvas();
+        const link = document.createElement('a');
+        link.download = `edited-meter-${Date.now()}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+
+    backToProjectsBtn.addEventListener('click', () => {
+        resetEditorState();
+        redrawCanvas();
+        [downloadBtn, saveProjectBtn].forEach(btn => btn.disabled = true);
+        showView('projects');
+        imageNavContainer.style.display = 'none';
+        projectNameInput.value = '';
+    });
+
+    prevMeterBtn.addEventListener('click', () => navigateMeters(-1));
+    nextMeterBtn.addEventListener('click', () => navigateMeters(1));
+
+    function navigateMeters(direction) {
+        if (!isCustomImage && defaultMeters.length > 0) {
+            currentMeterIndex = (currentMeterIndex + direction + defaultMeters.length) % defaultMeters.length;
+            projectNameInput.value = defaultMeters[currentMeterIndex].name;
+            loadAndDisplayImage(defaultMeters[currentMeterIndex].imageUrl);
+        }
+    }
+
+    // ============ IMAGE FILTERS ============
+    function handleFilterChange() {
+        document.getElementById('brightnessValue').textContent = brightnessSlider.value;
+        document.getElementById('contrastValue').textContent = contrastSlider.value;
+        document.getElementById('saturationValue').textContent = saturationSlider.value;
+        document.getElementById('hueValue').textContent = hueSlider.value;
+        document.getElementById('glowValue').textContent = glowSlider.value;
+        redrawCanvas();
+    }
+    [brightnessSlider, contrastSlider, saturationSlider, hueSlider, glowSlider].forEach(sl => sl.addEventListener('input', handleFilterChange));
+    resetFiltersBtn.addEventListener('click', () => {
+        [brightnessSlider, contrastSlider, saturationSlider, hueSlider, glowSlider].forEach(sl => sl.value = 0);
+        handleFilterChange();
+    });
+
+    editorView.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('btn-adjust')) return;
+        const slider = document.getElementById(e.target.dataset.target);
+        if (!slider) return;
+        let val = parseInt(slider.value) + parseInt(e.target.dataset.amount);
+        val = Math.max(parseInt(slider.min), Math.min(val, parseInt(slider.max)));
+        slider.value = val;
+        slider.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    // ============ LOCAL STORAGE ============
+    saveProjectBtn.addEventListener('click', () => {
+        const projectName = projectNameInput.value.trim();
+        if (!projectName) { alert("कृपया प्रोजेक्ट का नाम दर्ज करें!"); return; }
+        saveProjectBtn.disabled = true;
+        saveProjectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> सेव हो रहा है...';
+        try {
+            redrawCanvas();
+            const imageDataUrl = canvas.toDataURL('image/png');
+            const projectData = { name: projectName, imageUrl: imageDataUrl, textObjects: textObjects, templateName: isCustomImage ? null : (defaultMeters[currentMeterIndex] ? defaultMeters[currentMeterIndex].name : null) };
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('meterProject_')) {
+                    const existing = JSON.parse(localStorage.getItem(key));
+                    if (existing.name === projectName) { localStorage.removeItem(key); break; }
+                }
+            }
+            localStorage.setItem(`meterProject_${projectName}`, JSON.stringify(projectData));
+            alert(`प्रोजेक्ट "${projectName}" सफलतापूर्वक सेव हो गया!`);
+        } catch (error) {
+            alert("प्रोजेक्ट सेव नहीं हो सका। इमेज बहुत बड़ी हो सकती है।");
+            console.error(error);
+        } finally {
+            saveProjectBtn.disabled = false;
+            saveProjectBtn.innerHTML = '<i class="fas fa-save"></i> ब्राउज़र में सेव करें';
+        }
+    });
+
+    manageSavedProjectsBtn.addEventListener('click', () => {
+        projectList.innerHTML = '';
+        noProjectsMessage.style.display = 'none';
+        projectsModal.style.display = 'flex';
+        let foundProjects = false;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('meterProject_')) {
+                foundProjects = true;
+                const project = JSON.parse(localStorage.getItem(key));
+                const li = document.createElement('li');
+                let templateTag = '';
+                if (project.templateName) templateTag = `<br><small style="color: var(--saffron);">टेम्पलेट: ${project.templateName}</small>`;
+                li.innerHTML = `<span>${project.name}${templateTag}</span>
+                    <div class="project-actions">
+                        <button class="btn load-proj-btn" style="background-color: var(--success-color); color: white;">खोलें</button>
+                        <button class="btn delete-proj-btn" style="background-color: var(--danger-color); color: white;">हटाएं</button>
+                    </div>`;
+                li.querySelector('.load-proj-btn').addEventListener('click', () => loadSavedProject(project));
+                li.querySelector('.delete-proj-btn').addEventListener('click', () => {
+                    if(confirm(`"${project.name}" हटाएं?`)) { localStorage.removeItem(key); li.remove(); if(projectList.children.length === 0) noProjectsMessage.style.display = 'block'; }
+                });
+                projectList.appendChild(li);
+            }
+        }
+        if (!foundProjects) noProjectsMessage.style.display = 'block';
+    });
+
+    function loadSavedProject(project) {
+        isCustomImage = true; currentMeterIndex = -1;
+        loadAndDisplayImage(project.imageUrl);
+        setTimeout(() => {
+            textObjects = project.textObjects || [];
+            projectNameInput.value = project.name;
+            updateControls();
+            redrawCanvas();
+            projectsModal.style.display = 'none';
+        }, 100);
+    }
+
+    closeModalBtn.addEventListener('click', () => projectsModal.style.display = 'none');
+    projectsModal.addEventListener('click', (e) => { if (e.target === projectsModal) projectsModal.style.display = 'none'; });
+</script>
+</body>
+</html>
