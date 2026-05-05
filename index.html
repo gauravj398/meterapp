@@ -45,57 +45,69 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            padding-top: 56px;
         }
 
-        /* ============ LOGOUT BUTTON FIXED ============ */
-        .logout-btn {
+        /* ============ FIXED TOP BAR (logout button iske andar) ============ */
+        .fixed-top-bar {
             position: fixed;
-            top: 12px;
-            right: 12px;
-            z-index: 9999;
-            background: linear-gradient(135deg, var(--danger-color), #c82333);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(220,53,69,0.97), rgba(200,35,51,0.97));
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+        .fixed-top-bar .logout-btn {
+            position: static;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
             color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 30px;
+            padding: 7px 16px;
+            border-radius: 20px;
             font-size: 0.85em;
             font-weight: 600;
             cursor: pointer;
-            display: none;
+            display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 15px rgba(220,53,69,0.4);
             transition: all 0.3s;
             white-space: nowrap;
+            box-shadow: none;
         }
-        .logout-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220,53,69,0.5); }
+        .fixed-top-bar .logout-btn:hover {
+            background: rgba(255,255,255,0.35);
+            transform: none;
+            box-shadow: none;
+        }
 
-        /* ============ TIMER BAR (subtle, top) ============ */
+        /* ============ TIMER BAR (neche top bar ke) ============ */
         .timer-bar-container {
             position: fixed;
-            top: 0;
+            top: 48px;
             left: 0;
             width: 100%;
             height: 3px;
             background: rgba(0,0,0,0.03);
-            z-index: 9998;
+            z-index: 99998;
             display: none;
         }
         .timer-bar {
             height: 100%;
             width: 100%;
-            background: linear-gradient(90deg, var(--saffron), var(--danger-color));
+            background: rgba(255,255,255,0.5);
             transition: width 1s linear;
             border-radius: 0 2px 2px 0;
         }
 
-        /* ============ HIDDEN ELEMENTS (background me chalte, show nahi) ============ */
-        .auto-logout-warning {
-            display: none !important;
-        }
-        .current-time-display {
-            display: none !important;
-        }
+        /* ============ HIDDEN ELEMENTS ============ */
+        .auto-logout-warning { display: none !important; }
+        .current-time-display { display: none !important; }
 
         /* ============ LOGIN PAGE ============ */
         .login-page {
@@ -209,7 +221,7 @@
         .login-footer { text-align: center; margin-top: 25px; font-size: 0.85em; color: #999; }
 
         /* ============ PAGE TITLE ============ */
-        .page-title { text-align: center; margin-bottom: 30px; padding-right: 120px; }
+        .page-title { text-align: center; margin-bottom: 30px; }
         .page-title h1 {
             background: linear-gradient(90deg, var(--saffron), var(--india-green));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -275,7 +287,7 @@
         .slider-value { min-width: 35px; text-align: right; font-weight: 500; font-size: 1em; color: var(--chakra-blue); }
 
         /* ============ MODALS ============ */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal { display: none; position: fixed; z-index: 100000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow); border-top: 5px solid var(--chakra-blue); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
         .modal-header h2 { margin: 0; color: var(--primary-color); }
@@ -289,7 +301,7 @@
         .project-actions .btn { padding: 8px 12px; font-size: 0.9em; }
 
         /* ============ LOGOUT CONFIRM MODAL ============ */
-        .logout-modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        .logout-modal { display: none; position: fixed; z-index: 100001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
         .logout-modal-box { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25); border-top: 5px solid var(--danger-color); }
         .logout-modal-box i { font-size: 3em; color: var(--danger-color); margin-bottom: 15px; }
         .logout-modal-box h3 { margin: 0 0 10px 0; color: #333; }
@@ -302,17 +314,19 @@
 </head>
 <body>
 
-<!-- ============ FIXED LOGOUT BUTTON ============ -->
-<button class="logout-btn" id="logoutBtn">
-    <i class="fas fa-sign-out-alt"></i> लॉगआउट
-</button>
+<!-- ============ FIXED TOP BAR (logout button yahan hai, kabhi image par nahi aayega) ============ -->
+<div class="fixed-top-bar" id="fixedTopBar">
+    <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> लॉगआउट
+    </button>
+</div>
 
-<!-- ============ TIMER BAR (top, subtle) ============ -->
+<!-- ============ TIMER BAR ============ -->
 <div class="timer-bar-container" id="timerBarContainer">
     <div class="timer-bar" id="timerBar"></div>
 </div>
 
-<!-- ============ HIDDEN: Auto logout warning (background me chalta hai, dikhata nahi) ============ -->
+<!-- ============ HIDDEN: Auto logout warning ============ -->
 <div class="auto-logout-warning" id="autoLogoutWarning">
     <i class="fas fa-exclamation-triangle"></i>
     कोई गतिविधि नहीं! ऑटो लॉगआउट: <span class="countdown" id="autoLogoutCountdown">60</span>s
@@ -330,18 +344,15 @@
         </div>
         <p class="login-subtitle">सबका साथ सबका विकास</p>
 
-        <!-- HIDDEN: Live clock (background me chalta hai, dikhata nahi) -->
         <div class="current-time-display" id="currentTimeDisplay">
             अभी का समय: <span id="liveClock">--:--:--</span>
         </div>
 
-        <!-- Time Block Warning -->
         <div class="login-time-block" id="loginTimeBlock">
             <i class="fas fa-clock"></i>
             Pls Login 06:00 AM TO 08:00 PM
         </div>
 
-        <!-- Normal Error -->
         <div class="login-error" id="loginError">
             <i class="fas fa-exclamation-circle"></i>
             <span id="loginErrorText">ईमेल या पासवर्ड गलत है!</span>
@@ -531,6 +542,7 @@
     // ============ DOM ELEMENTS ============
     const loginPage = document.getElementById('loginPage');
     const mainApp = document.getElementById('mainApp');
+    const fixedTopBar = document.getElementById('fixedTopBar');
     const logoutBtn = document.getElementById('logoutBtn');
     const logoutModal = document.getElementById('logoutModal');
     const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
@@ -585,15 +597,13 @@
     const VALID_PASSWORD = '12345';
     const LOGIN_STORAGE_KEY = 'mbm_login_saved';
 
-    // ============ INACTIVITY TIMER CONFIG ============
+    // ============ INACTIVITY TIMER (Date.now() based — minimize par bhi kaam karega) ============
     const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 minutes
-    const WARNING_BEFORE_LOGOUT = 60; // 60 seconds warning
-    let inactivityTimer = null;
-    let countdownTimer = null;
-    let countdownValue = WARNING_BEFORE_LOGOUT;
+    let lastActivityTime = Date.now();
+    let inactivityCheckTimer = null;
     let isLoggedIn = false;
 
-    // ============ LIVE CLOCK (background me chalta hai, screen par nahi dikhta) ============
+    // ============ LIVE CLOCK (hidden, background me chalta hai) ============
     function updateLiveClock() {
         const now = new Date();
         let h = now.getHours();
@@ -601,8 +611,7 @@
         let s = now.getSeconds();
         const ampm = h >= 12 ? 'PM' : 'AM';
         h = h % 12 || 12;
-        const timeStr = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
-        liveClock.textContent = timeStr;
+        liveClock.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
     }
     setInterval(updateLiveClock, 1000);
     updateLiveClock();
@@ -630,61 +639,68 @@
     }
     setInterval(updateLoginTimeState, 10000);
 
-    // ============ INACTIVITY TIMER (background me chalta hai) ============
+    // ============ INACTIVITY TIMER — Date.now() approach ============
+    // Ye approach minimize/tab switch par bhi kaam karta hai kyunki
+    // Date.now() hamesha real time deta hai, setInterval pe depend nahi karta.
     function startInactivityTimer() {
         stopInactivityTimer();
+        lastActivityTime = Date.now();
         timerBarContainer.style.display = 'block';
         timerBar.style.width = '100%';
 
-        const totalSeconds = INACTIVITY_LIMIT / 1000;
-        let elapsed = 0;
-
-        inactivityTimer = setInterval(() => {
-            elapsed++;
-            const percent = Math.max(0, 100 - (elapsed / totalSeconds) * 100);
+        // Har 1 second me check karo — kitna time bacha hai
+        inactivityCheckTimer = setInterval(() => {
+            const now = Date.now();
+            const elapsed = now - lastActivityTime;
+            const remaining = Math.max(0, INACTIVITY_LIMIT - elapsed);
+            const percent = (remaining / INACTIVITY_LIMIT) * 100;
             timerBar.style.width = percent + '%';
 
-            // Warning chala do background me, kuch show mat karo
-            if (elapsed === (totalSeconds - WARNING_BEFORE_LOGOUT)) {
-                countdownValue = WARNING_BEFORE_LOGOUT;
-                countdownTimer = setInterval(() => {
-                    countdownValue--;
-                    autoLogoutCountdown.textContent = countdownValue;
-                    if (countdownValue <= 0) clearInterval(countdownTimer);
-                }, 1000);
-            }
-
-            // Auto logout silently
-            if (elapsed >= totalSeconds) {
+            // 30 minute poore ho gaye — silent logout
+            if (remaining <= 0) {
                 performAutoLogout();
             }
         }, 1000);
     }
 
-    function resetInactivityTimer() {
+    function recordActivity() {
         if (!isLoggedIn) return;
-        startInactivityTimer();
-        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+        lastActivityTime = Date.now();
     }
 
     function stopInactivityTimer() {
-        if (inactivityTimer) { clearInterval(inactivityTimer); inactivityTimer = null; }
-        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+        if (inactivityCheckTimer) { clearInterval(inactivityCheckTimer); inactivityCheckTimer = null; }
         timerBarContainer.style.display = 'none';
     }
 
     function performAutoLogout() {
-        // Silent logout — koi alert ya warning nahi, seedha logout
+        // Complete silent logout — no alert, no warning
         stopInactivityTimer();
         forceLogout(false);
     }
 
-    // Track user activity
+    // Track ALL user activity — mouse, keyboard, touch, scroll, visibility change
     const activityEvents = ['mousedown', 'mousemove', 'keydown', 'touchstart', 'touchmove', 'scroll', 'click'];
     activityEvents.forEach(event => {
-        document.addEventListener(event, () => {
-            if (isLoggedIn) resetInactivityTimer();
-        }, { passive: true });
+        document.addEventListener(event, recordActivity, { passive: true });
+    });
+
+    // Jab tab minimize ho ya switch ho — bhi time track karo
+    // visibilitychange tab par bhi fire hota hai jab user dusri tab pe jaye
+    document.addEventListener('visibilitychange', () => {
+        if (!isLoggedIn) return;
+        // Jab user wapas aaye to check karo ki 30 min se zyada to nahi hue
+        if (document.visibilityState === 'visible') {
+            const elapsed = Date.now() - lastActivityTime;
+            if (elapsed >= INACTIVITY_LIMIT) {
+                performAutoLogout();
+            }
+        }
+    });
+
+    // Page unload/blur bhi track karo (tab switch, minimize)
+    window.addEventListener('blur', () => {
+        if (isLoggedIn) recordActivity();
     });
 
     // ============ LOGIN/LOGOUT FUNCTIONS ============
@@ -702,7 +718,7 @@
     function doLogin() {
         loginPage.style.display = 'none';
         mainApp.style.display = 'block';
-        logoutBtn.style.display = 'flex';
+        fixedTopBar.style.display = 'flex';
         isLoggedIn = true;
         startInactivityTimer();
     }
@@ -715,7 +731,7 @@
         savePasswordCheck.checked = false;
         loginError.classList.remove('show');
         mainApp.style.display = 'none';
-        logoutBtn.style.display = 'none';
+        fixedTopBar.style.display = 'none';
         logoutModal.style.display = 'none';
         loginPage.style.display = 'flex';
         isLoggedIn = false;
